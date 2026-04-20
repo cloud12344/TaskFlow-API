@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f7f7f9;
+            color: #222;
+        }
+        .nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .nav a {
+            display: inline-block;
+            background: #2f6fad;
+            color: white;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+        .nav a:hover {
+            background: #255985;
+        }
+        .layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+            align-items: start;
+        }
+        .panel {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+        .task-list {
+            display: grid;
+            gap: 12px;
+        }
+        .task-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 14px;
+            background: #fcfcfd;
+        }
+        .task-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .task-meta {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .btn {
+            display: inline-block;
+            background: #2f6fad;
+            color: white;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #255985;
+        }
+        form p {
+            margin-bottom: 14px;
+        }
+        form input, form textarea, form select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 6px;
+            box-sizing: border-box;
+        }
+        .empty {
+            color: #666;
+        }
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/api/tasks/">Task Home</a>
+        <a href="/api/tasks/select/">Task Selector</a>
+        <a href="/api/tasks/api/">Raw API List</a>
+    </div>
+
+    <h1>TaskFlow Task Page</h1>
+    <p>Create tasks here and use the buttons to jump to any task detail page.</p>
+
+    <div class="layout">
+        <div class="panel">
+            <h2>Existing Tasks</h2>
+            {% if tasks %}
+                <div class="task-list">
+                    {% for task in tasks %}
+                        <div class="task-card">
+                            <div class="task-title">#{{ task.id }} - {{ task.title }}</div>
+                            <div class="task-meta">Status: {{ task.status }} | Priority: {{ task.priority }}</div>
+                            <a class="btn" href="/api/tasks/page/{{ task.id }}/">Open Task {{ task.id }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty">No tasks yet. Use the form to create your first task.</p>
+            {% endif %}
+        </div>
+
+        <div class="panel">
+            <h2>Create a Task</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn" type="submit">Create Task</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

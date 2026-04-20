@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task {{ task.id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f7f7f9;
+            color: #222;
+        }
+        .nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .nav a {
+            display: inline-block;
+            background: #2f6fad;
+            color: white;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+        .nav a:hover {
+            background: #255985;
+        }
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 800px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+        .field {
+            margin-bottom: 12px;
+        }
+        .label {
+            font-weight: 700;
+            margin-right: 6px;
+        }
+        .task-list {
+            margin-top: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .task-list a {
+            display: inline-block;
+            background: #e8eef6;
+            color: #1d3d5c;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #cfd9e6;
+        }
+        .task-list a:hover {
+            background: #d8e4f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/api/tasks/">Task Home</a>
+        <a href="/api/tasks/select/">Task Selector</a>
+        <a href="/api/tasks/api/">Raw API List</a>
+        <a href="/api/tasks/{{ task.id }}/">Raw API Detail</a>
+        {% if previous_task %}
+            <a href="/api/tasks/page/{{ previous_task.id }}/">Previous Task</a>
+        {% endif %}
+        {% if next_task %}
+            <a href="/api/tasks/page/{{ next_task.id }}/">Next Task</a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h1>Task #{{ task.id }}</h1>
+        <div class="field"><span class="label">Title:</span>{{ task.title }}</div>
+        <div class="field"><span class="label">Description:</span>{{ task.description|default:"No description" }}</div>
+        <div class="field"><span class="label">Status:</span>{{ task.status }}</div>
+        <div class="field"><span class="label">Priority:</span>{{ task.priority }}</div>
+        <div class="field"><span class="label">Due date:</span>{{ task.due_date|default:"Not set" }}</div>
+        <div class="field"><span class="label">Created:</span>{{ task.created_at }}</div>
+        <div class="field"><span class="label">Updated:</span>{{ task.updated_at }}</div>
+
+        <h2>Jump to another task</h2>
+        <div class="task-list">
+            {% for item in tasks %}
+                <a href="/api/tasks/page/{{ item.id }}/">Task {{ item.id }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,97 +1,144 @@
 # TaskFlow API
 
+## Module and Coursework Context
+This repository contains my individual coursework project for the **Web Services and Web Data** module (`XJCO3011`). The project implements a data-driven web API backed by a SQL database and is designed to satisfy the coursework requirement for a fully functional CRUD-based API system.
+
 ## Project Overview
-TaskFlow API is a data-driven web API for managing personal task items. It allows users to create, read, update, and delete tasks stored in a relational database. The API also validates user input and returns appropriate HTTP status codes for successful and failed requests.
+TaskFlow API is a task management system built with **Django**, **Django REST Framework**, and **SQLite**. It supports full CRUD operations for a single `Task` resource and returns structured JSON responses for API consumers. In addition to the API endpoints, the project also includes simple HTML navigation pages to make the system easier to demonstrate during the oral examination.
 
-This project was developed for the Web Services and Web Data coursework and demonstrates the core principles of API design, database integration, input validation, and structured JSON responses.
+The application allows users to:
+- create tasks
+- view all tasks
+- view one task by ID
+- update tasks
+- delete tasks
+- navigate between task pages using simple buttons and links
 
-## Current Features
-- Full CRUD operations for `Task`
-- SQLite database integration with SQLAlchemy ORM
-- Request and response validation with Pydantic
-- Automatic OpenAPI / Swagger documentation via FastAPI
-- Error handling for missing resources
-- Structured task fields including status, priority, and due date
+## Why This Project
+I selected a task management domain because it is a realistic and easy-to-understand use case for a web API. It is suitable for demonstrating:
+- relational database integration
+- REST-style CRUD operations
+- data validation
+- structured HTTP responses
+- future extensibility for analytics, authentication, and filtering
 
-## Task Model
-Each task currently contains the following fields:
-- `id`
-- `title`
-- `description`
-- `status` (`pending`, `in_progress`, `completed`)
-- `priority` (`low`, `medium`, `high`)
-- `due_date`
-- `created_at`
-- `updated_at`
+## Main Features
+- Full CRUD support for a `Task` resource
+- SQL database integration using SQLite
+- Django ORM model design
+- Django REST Framework JSON API endpoints
+- Validation for required and controlled fields
+- Timestamp tracking for created and updated records
+- Custom HTML pages for easier local demonstration and task navigation
+- Modular Django app structure
 
 ## Technology Stack
-- **Language**: Python
-- **Framework**: FastAPI
-- **Database**: SQLite
-- **ORM**: SQLAlchemy
-- **Validation**: Pydantic
-- **Server**: Uvicorn
+- **Programming language:** Python
+- **Framework:** Django
+- **API framework:** Django REST Framework
+- **Database:** SQLite
+- **ORM:** Django ORM
+- **Interface for demonstration:** Django templates
+
+## Task Data Model
+The system currently manages one main entity: `Task`.
+
+### Fields
+- `id`: unique task identifier
+- `title`: short task title
+- `description`: optional longer text description
+- `status`: `pending`, `in_progress`, or `completed`
+- `priority`: `low`, `medium`, or `high`
+- `due_date`: optional due date/time
+- `created_at`: record creation timestamp
+- `updated_at`: record update timestamp
 
 ## Project Structure
 ```text
 cwk1/
-├── app/
-│   ├── __init__.py
-│   ├── crud.py
-│   ├── database.py
-│   ├── main.py
-│   ├── models.py
-│   └── schemas.py
-├── README.md
+├── manage.py
 ├── requirements.txt
-└── XJCO3011_Coursework1_Brief__2025_2026.pdf
+├── README.md
+├── taskflow.db
+├── taskflow_project/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── tasks/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── migrations/
+│   └── templates/
+└── docs/
+    ├── api_documentation.md
+    └── technical_report.md
 ```
 
 ## Setup Instructions
-### 1. Create a virtual environment
+### 1. Create and activate a virtual environment
 On Windows:
 ```bash
-python -m venv venv
-venv\Scripts\activate
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
-On Linux / macOS:
+On macOS / Linux:
 ```bash
-python -m venv venv
-source venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 ```
 
-### 2. Install dependencies
+### 2. Install project dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run the API
+### 3. Apply migrations
 ```bash
-uvicorn app.main:app --reload
+python manage.py makemigrations
+python manage.py migrate
 ```
 
-### 4. Open the documentation
-- Swagger UI: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- ReDoc: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+### 4. Run the development server
+```bash
+python manage.py runserver
+```
+
+### 5. Open the project locally
+After starting the server, open:
+
+- Main task page: [http://127.0.0.1:8000/api/tasks/](http://127.0.0.1:8000/api/tasks/)
+- Task selector page: [http://127.0.0.1:8000/api/tasks/select/](http://127.0.0.1:8000/api/tasks/select/)
+- Raw API list endpoint: [http://127.0.0.1:8000/api/tasks/api/](http://127.0.0.1:8000/api/tasks/api/)
 
 ## API Endpoints
-### Task endpoints
-- `POST /tasks` - create a new task
-- `GET /tasks` - retrieve all tasks
-- `GET /tasks/{task_id}` - retrieve a specific task
-- `PUT /tasks/{task_id}` - update a specific task
-- `DELETE /tasks/{task_id}` - delete a specific task
+### JSON API Endpoints
+- `GET /api/tasks/api/` - return all tasks
+- `POST /api/tasks/api/` - create a new task
+- `GET /api/tasks/<id>/` - return one task
+- `PUT /api/tasks/<id>/` - update an existing task
+- `DELETE /api/tasks/<id>/` - delete a task
+
+### HTML Demonstration Pages
+These pages were added to make the system easier to present during the oral exam:
+- `GET /api/tasks/` - task home page with task list and create form
+- `GET /api/tasks/select/` - task selector page
+- `GET /api/tasks/page/<id>/` - navigable task detail page
 
 ## Example JSON Request
-### Create a task
 ```json
 {
   "title": "Finish coursework report",
   "description": "Write the final technical report section",
   "status": "pending",
   "priority": "high",
-  "due_date": "2026-04-25T12:00:00"
+  "due_date": "2026-04-25T12:00:00Z"
 }
 ```
 
@@ -103,95 +150,84 @@ uvicorn app.main:app --reload
   "description": "Write the final technical report section",
   "status": "pending",
   "priority": "high",
-  "due_date": "2026-04-25T12:00:00",
-  "created_at": "2026-04-20T10:00:00",
-  "updated_at": null
+  "due_date": "2026-04-25T12:00:00Z",
+  "created_at": "2026-04-20T10:00:00Z",
+  "updated_at": "2026-04-20T10:00:00Z"
 }
 ```
 
-## Error Handling
-The API currently returns standard HTTP status codes such as:
-- `201 Created` when a task is created successfully
-- `200 OK` when a task is retrieved or updated successfully
-- `204 No Content` when a task is deleted successfully
-- `404 Not Found` when a task does not exist
-- `422 Unprocessable Entity` when validation fails
+## HTTP Status Codes Used
+- `200 OK` - successful read or update
+- `201 Created` - resource created successfully
+- `204 No Content` - resource deleted successfully
+- `400 Bad Request` - invalid request data
+- `404 Not Found` - requested task does not exist
 
-## Documentation and Coursework Materials
-The repository should include the following submission materials:
-- API documentation PDF
-- Technical report PDF
-- Presentation slides
-- Public GitHub repository with commit history
+## Validation Rules
+- `title` is required and cannot be blank
+- `status` must be one of: `pending`, `in_progress`, `completed`
+- `priority` must be one of: `low`, `medium`, `high`
+- `due_date` is optional
 
-Draft coursework support files prepared in this repository:
-- `API_DOCUMENTATION.md`
-- `TECHNICAL_REPORT_DRAFT.md`
-- `PRESENTATION_SLIDES_OUTLINE.md`
+## Documentation and Supporting Files
+For coursework submission, the following supporting documents are included or will be included in the `docs/` folder:
+- API documentation
+- technical report
+- exported PDF versions for final submission where required
 
-## Current Status
-Completed:
-- Project structure
-- Database configuration
-- Task model definition
-- CRUD endpoints
-- Input validation
-- Basic error handling
+These documents should be referenced in the final GitHub submission and Minerva submission package.
 
-Planned next steps:
-- Add testing
-- Add filtering or analytics endpoints
-- Improve modular code structure
-- Prepare PDF documentation and presentation slides
+## Testing Approach
+The current project has been manually tested in local development by:
+- creating tasks through the HTML task page
+- retrieving all tasks from the JSON API
+- viewing individual tasks by ID
+- updating tasks through the API
+- deleting tasks through the API
+- checking navigation between the custom task pages
+- confirming that migrations and database persistence work correctly
 
-## Notes for Submission
-Before final submission, make sure to:
-- export the API documentation to PDF
-- convert the technical report into PDF
-- prepare the presentation in PowerPoint format
-- include a GenAI declaration and selected conversation logs as appendix material
+## Current Limitations
+- only one main resource (`Task`) is implemented
+- no authentication is included at this stage
+- no automated unit or integration test suite has been added yet
+- no public deployment has been completed yet
+- filtering, search, and analytics endpoints are not yet implemented
 
-## Deployment on PythonAnywhere
-This project is now prepared to be deployed more safely by using an environment-aware database configuration.
+## Potential Future Improvements
+- add authentication and user-specific tasks
+- add filtering and sorting by status, priority, or due date
+- add analytics endpoints for overdue tasks and completion patterns
+- deploy to a public hosting platform such as PythonAnywhere
+- add automated tests using Django's testing tools
+- improve documentation with exported PDF versions and screenshots
 
-### Deployment-related improvements
-- `app/database.py` now supports a `DATABASE_URL` environment variable.
-- If `DATABASE_URL` is not set, the app falls back to a local SQLite database file.
-- SQLite automatically uses the correct SQLAlchemy `check_same_thread` option.
-- `requirements.txt` now uses pinned dependency versions for more stable deployment.
+## Generative AI Declaration
+Generative AI tools were used in a declared and structured way during this coursework.
 
-### Recommended PythonAnywhere workflow
-1. Push the project to GitHub.
-2. Log into PythonAnywhere and open a Bash console.
-3. Clone the repository:
-   ```bash
-   git clone <your-repository-url>
-   ```
-4. Create a virtual environment and install dependencies:
-   ```bash
-   mkvirtualenv --python=/usr/bin/python3.10 taskflow-env
-   workon taskflow-env
-   pip install -r requirements.txt
-   ```
-5. Create a new web app from the PythonAnywhere dashboard.
-6. Point the web app to this project and configure the virtualenv path.
-7. Set the source directory so Python can import the `app` package.
-8. Configure the app entry point to load `app.main:app`.
-9. Reload the web app.
+### Tools used
+- ChatGPT
+- Cursor AI assistant
 
-### Database configuration on PythonAnywhere
-If you want to keep using SQLite on PythonAnywhere, set a full absolute path through `DATABASE_URL`, for example:
+### Purposes
+- planning project structure
+- debugging migration and routing issues
+- refining navigation design for demonstration pages
+- improving documentation structure and wording
+- checking deliverables against the coursework brief
 
-```bash
-export DATABASE_URL="sqlite:////home/yourusername/cwk1/taskflow.db"
-```
+### Reflection
+AI was used as a support tool for planning, debugging, and documentation rather than as a substitute for understanding the project. All major implementation choices were reviewed and adapted manually. The final project structure, design decisions, and explanations remain my own responsibility.
 
-This avoids issues caused by relative file paths when the app runs on the server.
+## References
+- Django Software Foundation. *Django Documentation*. Available at: https://docs.djangoproject.com/
+- Django REST Framework. *Official Documentation*. Available at: https://www.django-rest-framework.org/
+- SQLite. *SQLite Documentation*. Available at: https://www.sqlite.org/docs.html
 
-### Suggested next deployment step
-Before deploying, test locally with:
-```bash
-uvicorn app.main:app --reload
-```
-and confirm the API works at `/docs` and `/redoc`.
-
+## Submission Note
+Before final submission, I should ensure that the repository includes:
+- this completed `README.md`
+- the API documentation file and exported PDF version
+- the technical report file and exported PDF version
+- presentation slides link or file reference
+- a clear commit history in GitHub
