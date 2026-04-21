@@ -169,6 +169,11 @@ These pages were added to make the system easier to present during the oral exam
 - `priority` must be one of: `low`, `medium`, `high`
 - `due_date` is optional
 
+## Supporting Documents
+
+API Documentation: [api.pdf](./docs/api.pdf)  
+Technical Report: [report.pdf](./docs/report.pdf)
+
 
 ## Testing Approach
 The current project has been manually tested in local development by:
