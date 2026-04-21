@@ -169,13 +169,6 @@ These pages were added to make the system easier to present during the oral exam
 - `priority` must be one of: `low`, `medium`, `high`
 - `due_date` is optional
 
-## Documentation and Supporting Files
-For coursework submission, the following supporting documents are included or will be included in the `docs/` folder:
-- API documentation
-- technical report
-- exported PDF versions for final submission where required
-
-These documents should be referenced in the final GitHub submission and Minerva submission package.
 
 ## Testing Approach
 The current project has been manually tested in local development by:
@@ -187,47 +180,6 @@ The current project has been manually tested in local development by:
 - checking navigation between the custom task pages
 - confirming that migrations and database persistence work correctly
 
-## Current Limitations
-- only one main resource (`Task`) is implemented
-- no authentication is included at this stage
-- no automated unit or integration test suite has been added yet
-- no public deployment has been completed yet
-- filtering, search, and analytics endpoints are not yet implemented
 
-## Potential Future Improvements
-- add authentication and user-specific tasks
-- add filtering and sorting by status, priority, or due date
-- add analytics endpoints for overdue tasks and completion patterns
-- deploy to a public hosting platform such as PythonAnywhere
-- add automated tests using Django's testing tools
-- improve documentation with exported PDF versions and screenshots
 
-## Generative AI Declaration
-Generative AI tools were used in a declared and structured way during this coursework.
 
-### Tools used
-- ChatGPT
-- Cursor AI assistant
-
-### Purposes
-- planning project structure
-- debugging migration and routing issues
-- refining navigation design for demonstration pages
-- improving documentation structure and wording
-- checking deliverables against the coursework brief
-
-### Reflection
-AI was used as a support tool for planning, debugging, and documentation rather than as a substitute for understanding the project. All major implementation choices were reviewed and adapted manually. The final project structure, design decisions, and explanations remain my own responsibility.
-
-## References
-- Django Software Foundation. *Django Documentation*. Available at: https://docs.djangoproject.com/
-- Django REST Framework. *Official Documentation*. Available at: https://www.django-rest-framework.org/
-- SQLite. *SQLite Documentation*. Available at: https://www.sqlite.org/docs.html
-
-## Submission Note
-Before final submission, I should ensure that the repository includes:
-- this completed `README.md`
-- the API documentation file and exported PDF version
-- the technical report file and exported PDF version
-- presentation slides link or file reference
-- a clear commit history in GitHub
